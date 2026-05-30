@@ -64,15 +64,12 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
 #toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:var(--bg);padding:9px 20px;border-radius:20px;font-size:.83rem;opacity:0;transition:all .3s;z-index:9999;pointer-events:none;white-space:nowrap;}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
-/* LOADING OVERLAY */
 #loadingOverlay{position:fixed;inset:0;background:var(--bg);z-index:9998;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;}
 #loadingOverlay p{font-family:'Crimson Pro',serif;font-style:italic;color:var(--text3);font-size:1rem;}
 .spinner{width:32px;height:32px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* SETUP BANNER */
 #setupBanner{background:var(--danger-bg);border-bottom:2px solid var(--danger);padding:.8rem 1.5rem;font-size:.85rem;color:var(--danger);display:none;text-align:center;}
-#setupBanner a{color:var(--danger);text-decoration:underline;}
 
 .home-hero{padding:2.5rem 1.5rem 1.5rem;max-width:1100px;margin:0 auto;}
 .home-hero h1{font-family:'Crimson Pro',serif;font-size:2.2rem;font-weight:300;font-style:italic;margin-bottom:.3rem;}
@@ -89,6 +86,7 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
 .novel-card-title{font-family:'Crimson Pro',serif;font-size:.98rem;font-weight:600;margin-top:.55rem;line-height:1.3;}
 .novel-card-meta{font-size:.75rem;color:var(--text3);margin-top:.15rem;}
 .continue-badge{position:absolute;bottom:6px;left:6px;right:6px;background:rgba(0,0,0,0.72);color:#fff;font-size:.68rem;padding:3px 7px;border-radius:4px;text-align:center;backdrop-filter:blur(4px);}
+.fav-badge{position:absolute;top:6px;right:6px;font-size:.85rem;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5));}
 .tag{display:inline-block;background:var(--accent-bg);color:var(--accent2);font-size:.68rem;padding:2px 7px;border-radius:20px;margin:2px 2px 0 0;}
 .status-pill{display:inline-block;font-size:.68rem;padding:2px 8px;border-radius:20px;margin-right:4px;}
 .status-active{background:var(--success-bg);color:var(--success);}
@@ -166,6 +164,31 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
 .reader-nav-btn.center{background:var(--accent-bg);color:var(--accent2);border-color:rgba(124,58,30,.3);min-width:130px;text-align:center;}
 .reader-nav-btn.center:hover{background:var(--accent);color:#fff;}
 
+/* CONTEXT MENU PARA REPORTAR ERRORES */
+.custom-ctx-menu{position:fixed;background:var(--surface);border:1px solid var(--border2);border-radius:9px;box-shadow:0 8px 24px var(--shadow2);z-index:8000;min-width:180px;overflow:hidden;display:none;}
+.custom-ctx-menu.open{display:block;}
+.ctx-item{display:flex;align-items:center;gap:8px;padding:.55rem 1rem;font-size:.83rem;color:var(--text2);cursor:pointer;transition:background .15s;border:none;background:none;width:100%;text-align:left;}
+.ctx-item:hover{background:var(--bg2);color:var(--text);}
+.ctx-item.danger{color:var(--danger);}
+
+/* MODAL DE REPORTE */
+.report-selected-text{background:var(--bg2);border-left:3px solid var(--accent);padding:.6rem .9rem;border-radius:0 6px 6px 0;font-family:'Crimson Pro',serif;font-size:.9rem;color:var(--text2);line-height:1.6;margin-bottom:1rem;max-height:80px;overflow-y:auto;font-style:italic;}
+
+/* BADGE DE NOTIFICACIONES */
+.notif-badge{background:var(--danger);color:#fff;font-size:.6rem;font-weight:700;padding:1px 5px;border-radius:10px;min-width:16px;text-align:center;display:none;}
+.notif-badge.show{display:inline-block;}
+
+/* PANEL DE REPORTES EN ADMIN */
+.report-item{padding:.8rem;background:var(--bg2);border:1px solid var(--border);border-radius:8px;margin-bottom:.6rem;font-size:.83rem;}
+.report-item-header{display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem;margin-bottom:.4rem;}
+.report-item-title{font-weight:500;color:var(--text);font-size:.85rem;}
+.report-item-meta{font-size:.73rem;color:var(--text3);}
+.report-item-text{color:var(--text3);font-style:italic;font-family:'Crimson Pro',serif;font-size:.88rem;margin-bottom:.5rem;padding:.4rem .6rem;background:var(--surface);border-radius:4px;}
+.report-item-comment{color:var(--text2);font-size:.82rem;margin-bottom:.5rem;}
+.report-resolved{opacity:.5;}
+.report-item-actions{display:flex;gap:6px;}
+
+/* MODAL overlays */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.52);z-index:200;align-items:center;justify-content:center;padding:1rem;}
 .modal-overlay.open{display:flex;}
 .modal{background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:1.8rem;max-width:600px;width:100%;max-height:92vh;overflow-y:auto;}
@@ -200,6 +223,7 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
 .preview-box{border:1px solid var(--border2);border-radius:8px;padding:1rem 1.2rem;background:var(--bg2);max-height:260px;overflow-y:auto;font-family:'Crimson Pro',serif;font-size:.95rem;line-height:1.85;color:var(--text);}
 .preview-box p{margin-bottom:.9em;}
 
+/* AUTH */
 .auth-gate{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:400;align-items:center;justify-content:center;}
 .auth-gate.open{display:flex;}
 .auth-box{background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:2rem;width:340px;}
@@ -211,6 +235,25 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
 .auth-error{color:var(--danger);font-size:.8rem;margin-top:.3rem;min-height:1.1rem;}
 .auth-divider{border:none;border-top:1px solid var(--border);margin:1rem 0;}
 
+/* PERFIL DE USUARIO */
+.profile-section{margin-bottom:1.5rem;}
+.profile-section h3{font-family:'Crimson Pro',serif;font-size:1rem;font-weight:600;color:var(--text2);margin-bottom:.8rem;padding-bottom:.4rem;border-bottom:1px solid var(--border);}
+.profile-novels-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:.8rem;}
+.profile-novel-card{cursor:pointer;text-align:center;}
+.profile-novel-card:hover .novel-cover{transform:translateY(-2px);box-shadow:0 4px 12px var(--shadow2);}
+.profile-novel-card .novel-cover{width:100%;aspect-ratio:2/3;background:var(--bg3);border-radius:5px;overflow:hidden;border:1px solid var(--border);transition:all .2s;}
+.profile-novel-card .novel-cover img{width:100%;height:100%;object-fit:cover;}
+.profile-novel-card .pnc-title{font-size:.72rem;color:var(--text2);margin-top:.35rem;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.profile-novel-card .pnc-progress{font-size:.65rem;color:var(--text3);}
+.profile-stat{display:flex;align-items:center;justify-content:space-between;padding:.4rem 0;border-bottom:1px solid var(--border);font-size:.84rem;}
+.profile-stat:last-child{border-bottom:none;}
+.profile-stat span:first-child{color:var(--text3);}
+.profile-stat span:last-child{color:var(--text);font-weight:500;}
+.fav-btn{background:none;border:1px solid var(--border2);color:var(--text3);padding:5px 12px;border-radius:8px;font-size:.8rem;transition:all .2s;display:flex;align-items:center;gap:5px;}
+.fav-btn:hover{background:var(--bg2);}
+.fav-btn.active{background:rgba(200,100,30,.1);color:#c86a1e;border-color:rgba(200,100,30,.3);}
+
+/* DROPDOWN */
 .user-dropdown{position:absolute;top:56px;right:1.5rem;background:var(--surface);border:1px solid var(--border2);border-radius:10px;min-width:180px;box-shadow:0 8px 24px var(--shadow2);z-index:300;overflow:hidden;display:none;}
 .user-dropdown.open{display:block;}
 .user-dropdown-header{padding:.8rem 1rem;border-bottom:1px solid var(--border);}
@@ -231,10 +274,16 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
 .badge-admin{background:var(--accent-bg);color:var(--accent2);}
 .badge-user{background:var(--bg3);color:var(--text3);}
 
-/* IMPORT/EXPORT */
 .import-export-box{background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:1.2rem;margin-bottom:1.2rem;}
 .import-export-box h4{font-size:.82rem;font-weight:600;color:var(--text2);margin-bottom:.8rem;text-transform:uppercase;letter-spacing:.05em;}
 .import-export-btns{display:flex;gap:8px;flex-wrap:wrap;}
+
+/* TABS EN MODAL */
+.modal-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:1.2rem;gap:0;}
+.modal-tab{background:none;border:none;border-bottom:2px solid transparent;padding:.5rem 1rem;font-size:.83rem;color:var(--text3);transition:all .2s;margin-bottom:-1px;}
+.modal-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.modal-tab-panel{display:none;}
+.modal-tab-panel.active{display:block;}
 
 @media(max-width:600px){
   .novel-header{flex-direction:column;}
@@ -280,13 +329,13 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
     <div class="user-dropdown-name" id="ddName">–</div>
     <div class="user-dropdown-role" id="ddRole">–</div>
   </div>
-  <button class="dropdown-item" onclick="openUserPrefs()">⚙ Preferencias</button>
-  <button class="dropdown-item admin-only" style="display:none" onclick="closeUserMenu();openAdminPanel()">🛠 Panel admin</button>
+  <button class="dropdown-item" onclick="openUserProfile()">👤 Mi perfil</button>
+  <button class="dropdown-item admin-only" style="display:none" onclick="closeUserMenu();openAdminPanel()">🛠 Panel admin <span class="notif-badge" id="adminBadge"></span></button>
   <hr class="dropdown-sep">
   <button class="dropdown-item danger" onclick="logoutUser()">↩ Cerrar sesión</button>
 </div>
 
-<!-- ═══ HOME ═══ -->
+<!-- HOME -->
 <div id="page-home" class="page active">
   <div class="home-hero">
     <h1>Mis Traducciones</h1>
@@ -300,7 +349,7 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
   <div class="novels-grid" id="novelsGrid"></div>
 </div>
 
-<!-- ═══ NOVEL PAGE ═══ -->
+<!-- NOVEL PAGE -->
 <div id="page-novel" class="page">
   <div class="novel-page">
     <button class="back-btn" onclick="showPage('home')">← Inicio</button>
@@ -317,6 +366,7 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
           <span id="ndDate" style="display:none">Agregada: <b id="ndDateVal"></b></span>
         </div>
         <div class="novel-actions">
+          <button class="fav-btn" id="favBtn" onclick="toggleFavorite()">♡ Favorito</button>
           <button class="btn btn-primary admin-only" style="display:none" onclick="openAddChapter()">+ Capítulo</button>
           <button class="btn btn-secondary admin-only" style="display:none" onclick="openEditNovel()">✏ Editar</button>
           <button class="btn btn-danger btn-sm admin-only" style="display:none" onclick="confirmDeleteNovel()">✕ Eliminar</button>
@@ -330,7 +380,7 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
   </div>
 </div>
 
-<!-- ═══ READER ═══ -->
+<!-- READER -->
 <div id="page-reader" class="page">
   <div class="reader-wrap" id="readerWrap">
     <div class="reader-toolbar">
@@ -375,7 +425,12 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
   </div>
 </div>
 
-<!-- ═══ MODAL: Novela ═══ -->
+<!-- CONTEXT MENU -->
+<div class="custom-ctx-menu" id="ctxMenu">
+  <button class="ctx-item danger" onclick="openReportModal()">⚠ Indicar error en este texto</button>
+</div>
+
+<!-- MODAL: Novela -->
 <div class="modal-overlay" id="modalNovel">
   <div class="modal">
     <h2 id="novelModalH">Nueva Novela</h2>
@@ -406,7 +461,7 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
   </div>
 </div>
 
-<!-- ═══ MODAL: Capítulo ═══ -->
+<!-- MODAL: Capítulo -->
 <div class="modal-overlay" id="modalChapter">
   <div class="modal modal-lg">
     <h2 id="chModalH">Nuevo Capítulo</h2>
@@ -446,7 +501,7 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
   </div>
 </div>
 
-<!-- ═══ MODAL: Selector capítulo ═══ -->
+<!-- MODAL: Selector capítulo -->
 <div class="modal-overlay" id="modalChPicker">
   <div class="modal" style="max-width:380px">
     <h2>Ir a capítulo</h2>
@@ -455,11 +510,34 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
   </div>
 </div>
 
-<!-- ═══ AUTH GATE ═══ -->
+<!-- MODAL: Reportar error -->
+<div class="modal-overlay" id="modalReport">
+  <div class="modal" style="max-width:420px">
+    <h2>⚠ Indicar error</h2>
+    <p style="font-size:.84rem;color:var(--text3);margin-bottom:1rem;line-height:1.6">Marcaste el siguiente texto:</p>
+    <div class="report-selected-text" id="reportSelectedText"></div>
+    <div class="field">
+      <label>Comentario (opcional)</label>
+      <textarea id="reportComment" style="min-height:70px" placeholder="Ej: Esta palabra debería ser... / Falta un espacio... / Error de traducción..."></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modalReport')">Cancelar</button>
+      <button class="btn btn-primary" onclick="submitReport()">Enviar reporte</button>
+    </div>
+  </div>
+</div>
+
+<!-- AUTH GATE -->
 <div class="auth-gate" id="authGate">
   <div class="auth-box">
     <h3>✦ Traducciones</h3>
-    <p id="authSubtitle">Iniciá sesión para acceder</p>
+    <p id="authSubtitle">Accedé a tu cuenta</p>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabLoginBtn" onclick="switchAuthTab('login')">Iniciar sesión</button>
+      <button class="auth-tab" id="tabRegisterBtn" onclick="switchAuthTab('register')">Registrarse</button>
+    </div>
+
+    <!-- LOGIN -->
     <div id="loginForm">
       <div class="field"><label>Usuario</label><input type="text" id="loginUser" placeholder="Tu nombre de usuario" autocomplete="username"></div>
       <div class="field"><label>Contraseña</label><input type="password" id="loginPass" placeholder="Contraseña" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
@@ -468,29 +546,75 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
       <hr class="auth-divider">
       <button class="btn btn-secondary btn-sm" style="width:100%;justify-content:center" onclick="continueAsGuest()">Continuar como invitado</button>
     </div>
+
+    <!-- REGISTER -->
+    <div id="registerForm" style="display:none">
+      <div class="field"><label>Nombre de usuario</label><input type="text" id="regUser" placeholder="Elegí un nombre de usuario" autocomplete="username"></div>
+      <div class="field"><label>Contraseña</label><input type="password" id="regPass" placeholder="Contraseña" autocomplete="new-password"></div>
+      <div class="field"><label>Confirmar contraseña</label><input type="password" id="regPass2" placeholder="Repetí la contraseña" onkeydown="if(event.key==='Enter')doRegister()"></div>
+      <div class="auth-error" id="registerError"></div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:.5rem" onclick="doRegister()">Crear cuenta</button>
+      <hr class="auth-divider">
+      <button class="btn btn-secondary btn-sm" style="width:100%;justify-content:center" onclick="continueAsGuest()">Continuar como invitado</button>
+    </div>
   </div>
 </div>
 
-<!-- ═══ MODAL: Admin Panel ═══ -->
-<div class="modal-overlay" id="modalAdmin">
+<!-- MODAL: Perfil de usuario -->
+<div class="modal-overlay" id="modalProfile">
   <div class="modal" style="max-width:560px">
-    <h2>🛠 Panel Admin</h2>
+    <h2 id="profileTitle">👤 Mi perfil</h2>
+    <div class="modal-tabs">
+      <button class="modal-tab active" onclick="switchProfileTab('stats')">Estadísticas</button>
+      <button class="modal-tab" onclick="switchProfileTab('favorites')">Favoritos</button>
+      <button class="modal-tab" onclick="switchProfileTab('history')">Historial</button>
+    </div>
+    <div class="modal-tab-panel active" id="profileTabStats">
+      <div id="profileStats"></div>
+    </div>
+    <div class="modal-tab-panel" id="profileTabFavorites">
+      <div class="profile-novels-grid" id="profileFavorites"></div>
+    </div>
+    <div class="modal-tab-panel" id="profileTabHistory">
+      <div class="profile-novels-grid" id="profileHistory"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modalProfile')">Cerrar</button>
+    </div>
+  </div>
+</div>
 
-    <!-- IMPORT / EXPORT -->
-    <div class="import-export-box">
-      <h4>📦 Backup / Importar datos</h4>
-      <p style="font-size:.82rem;color:var(--text3);margin-bottom:.9rem;line-height:1.6">
-        Exportá todos los datos a un archivo JSON para hacer backup o migrar desde localStorage.
-        Para importar datos viejos, usá el botón de abajo.
-      </p>
-      <div class="import-export-btns">
-        <button class="btn btn-secondary btn-sm" onclick="exportData()">⬇ Exportar JSON</button>
-        <button class="btn btn-secondary btn-sm" onclick="document.getElementById('importFileInput').click()">⬆ Importar JSON</button>
-        <input type="file" id="importFileInput" accept=".json" style="display:none" onchange="importData(this)">
+<!-- MODAL: Admin Panel -->
+<div class="modal-overlay" id="modalAdmin">
+  <div class="modal" style="max-width:620px">
+    <h2>🛠 Panel Admin</h2>
+    <div class="modal-tabs">
+      <button class="modal-tab active" onclick="switchAdminTab('backup')">Backup</button>
+      <button class="modal-tab" onclick="switchAdminTab('reports')">Reportes <span class="notif-badge" id="adminBadgeModal"></span></button>
+      <button class="modal-tab" onclick="switchAdminTab('admins')">Admins</button>
+    </div>
+
+    <div class="modal-tab-panel active" id="adminTabBackup">
+      <div class="import-export-box">
+        <h4>📦 Backup / Importar datos</h4>
+        <p style="font-size:.82rem;color:var(--text3);margin-bottom:.9rem;line-height:1.6">
+          Exportá todos los datos a un archivo JSON para hacer backup.
+        </p>
+        <div class="import-export-btns">
+          <button class="btn btn-secondary btn-sm" onclick="exportData()">⬇ Exportar JSON</button>
+          <button class="btn btn-secondary btn-sm" onclick="document.getElementById('importFileInput').click()">⬆ Importar JSON</button>
+          <input type="file" id="importFileInput" accept=".json" style="display:none" onchange="importData(this)">
+        </div>
       </div>
     </div>
 
-    <div style="margin-bottom:1.2rem">
+    <div class="modal-tab-panel" id="adminTabReports">
+      <div id="reportsContainer">
+        <p style="color:var(--text3);font-size:.85rem;font-style:italic">Cargando reportes...</p>
+      </div>
+    </div>
+
+    <div class="modal-tab-panel" id="adminTabAdmins">
       <div style="font-size:.82rem;color:var(--text3);margin-bottom:.6rem;text-transform:uppercase;letter-spacing:.05em;font-weight:500">Admins del sistema</div>
       <ul class="user-list">
         <li class="user-list-item"><span>pera</span><span class="user-badge badge-admin">admin</span></li>
@@ -498,23 +622,12 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
         <li class="user-list-item"><span>skull</span><span class="user-badge badge-admin">admin</span></li>
       </ul>
     </div>
+
     <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('modalAdmin')">Cerrar</button></div>
   </div>
 </div>
 
-<!-- ═══ MODAL: User Prefs ═══ -->
-<div class="modal-overlay" id="modalPrefs">
-  <div class="modal" style="max-width:400px">
-    <h2>⚙ Preferencias</h2>
-    <div class="field"><label>Nombre de usuario</label><input type="text" id="prefUsername" readonly style="opacity:.6"></div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="closeModal('modalPrefs')">Cerrar</button>
-      <button class="btn btn-primary" onclick="savePrefs()">Guardar</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ CONFIRM ═══ -->
+<!-- CONFIRM -->
 <div class="modal-overlay" id="modalConfirm">
   <div class="confirm-box">
     <p id="confirmMsg">¿Estás seguro?</p>
@@ -529,13 +642,13 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
 
 <script>
 // ════════════════════════════════════════════
-//  ⚙️ CONFIGURACIÓN SUPABASE — EDITÁ ESTO
+//  ⚙️ CONFIGURACIÓN SUPABASE
 // ════════════════════════════════════════════
 const SUPABASE_URL = 'https://nlicistnosjzynobqbvr.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_pVyt7zA5ap9dNf40ZoyYGg_tCptxdAm';
 
 // ════════════════════════════════════════════
-//  ADMINS FIJOS (no necesitan registrarse)
+//  ADMINS FIJOS
 // ════════════════════════════════════════════
 const ADMIN_CREDENTIALS = {
   'pera':   'h' + Math.abs(hashPwdSync('GoGodSaporu')).toString(36),
@@ -573,11 +686,14 @@ let S = {
   chImages: [],
   novels: [],
   readMap: {},
-  continueMap: {}
+  continueMap: {},
+  favorites: [],
+  // reporte en curso
+  reportSelection: '',
 };
 
 // ════════════════════════════════════════════
-//  SUPABASE CLIENT (sin dependencias externas)
+//  SUPABASE CLIENT
 // ════════════════════════════════════════════
 const sb = {
   async query(path, opts = {}) {
@@ -592,10 +708,7 @@ const sb = {
       method: opts.method || 'GET',
       body: opts.body ? JSON.stringify(opts.body) : undefined
     });
-    if (!res.ok) {
-      const err = await res.text();
-      throw new Error(err);
-    }
+    if (!res.ok) { const err = await res.text(); throw new Error(err); }
     const text = await res.text();
     return text ? JSON.parse(text) : null;
   },
@@ -616,6 +729,9 @@ const sb = {
   async getOne(table, id) {
     const rows = await this.query(table + '?id=eq.' + id + '&select=*') || [];
     return rows[0] || null;
+  },
+  async getWhere(table, col, val) {
+    return await this.query(table + '?' + col + '=eq.' + encodeURIComponent(val) + '&select=*') || [];
   }
 };
 
@@ -623,7 +739,6 @@ const sb = {
 //  INIT
 // ════════════════════════════════════════════
 async function init() {
-  // Verificar config
   if (SUPABASE_URL === 'PEGAR_TU_PROJECT_URL_AQUI') {
     document.getElementById('setupBanner').style.display = 'block';
     document.getElementById('loadingOverlay').style.display = 'none';
@@ -631,19 +746,31 @@ async function init() {
     return;
   }
 
-  // Dark mode
   if (localStorage.getItem('nt_dark') === '1') {
     S.dark = true; document.body.classList.add('dark');
   }
 
-  // Sesión guardada
   const savedSession = localStorage.getItem('nt_session');
   if (savedSession) {
-    const role = ADMIN_CREDENTIALS.hasOwnProperty(savedSession) ? 'admin' : 'user';
-    S.currentUser = { username: savedSession, role };
-    loadLocalPrefs();
-    updateNavUser();
-    if (role === 'admin') { S.admin = true; updateAdminUI(); }
+    // Admin?
+    if (ADMIN_CREDENTIALS.hasOwnProperty(savedSession)) {
+      S.currentUser = { username: savedSession, role: 'admin', id: 'admin_' + savedSession };
+      S.admin = true;
+      loadLocalPrefs();
+      updateNavUser(); updateAdminUI();
+    } else {
+      // Usuario registrado — buscar en Supabase
+      try {
+        const rows = await sb.getWhere('users', 'username', savedSession);
+        if (rows.length > 0) {
+          S.currentUser = { username: rows[0].username, role: 'user', id: rows[0].id };
+          await loadUserData();
+        } else {
+          localStorage.removeItem('nt_session');
+        }
+      } catch(e) { localStorage.removeItem('nt_session'); }
+      updateNavUser();
+    }
   }
 
   if (!S.currentUser) {
@@ -652,46 +779,101 @@ async function init() {
     return;
   }
 
-  try {
-    await loadData();
-  } catch(e) {
-    toast('Error conectando a Supabase: ' + e.message, 4000);
-  }
+  try { await loadData(); } catch(e) { toast('Error conectando a Supabase: ' + e.message, 4000); }
 
   document.getElementById('loadingOverlay').style.display = 'none';
   renderHome();
+
+  if (S.admin) updateAdminBadge();
 
   window.addEventListener('scroll', updateProgressBar);
   document.addEventListener('click', e => {
     if (!e.target.closest('#userDropdown') && !e.target.closest('#navUserBtn')) {
       document.getElementById('userDropdown').classList.remove('open');
     }
+    // Cerrar ctx menu
+    if (!e.target.closest('#ctxMenu')) {
+      document.getElementById('ctxMenu').classList.remove('open');
+    }
   });
+
+  // Context menu en lector
+  document.addEventListener('contextmenu', handleContextMenu);
 }
 
 // ════════════════════════════════════════════
-//  AUTH
+//  AUTH — TABS
 // ════════════════════════════════════════════
-function doLogin() {
+function switchAuthTab(tab) {
+  document.getElementById('loginForm').style.display = tab === 'login' ? '' : 'none';
+  document.getElementById('registerForm').style.display = tab === 'register' ? '' : 'none';
+  document.getElementById('tabLoginBtn').classList.toggle('active', tab === 'login');
+  document.getElementById('tabRegisterBtn').classList.toggle('active', tab === 'register');
+  document.getElementById('loginError').textContent = '';
+  document.getElementById('registerError').textContent = '';
+}
+
+// ════════════════════════════════════════════
+//  AUTH — LOGIN
+// ════════════════════════════════════════════
+async function doLogin() {
   const username = document.getElementById('loginUser').value.trim().toLowerCase();
   const pwd = document.getElementById('loginPass').value;
   const errEl = document.getElementById('loginError');
   if (!username || !pwd) { errEl.textContent = 'Completá los campos.'; return; }
 
+  // Admin?
   if (ADMIN_CREDENTIALS.hasOwnProperty(username)) {
-    if (hashPwd(pwd) !== ADMIN_CREDENTIALS[username]) {
-      errEl.textContent = 'Contraseña incorrecta.'; return;
-    }
-    loginSuccess(username, 'admin');
-  } else {
-    errEl.textContent = 'Usuario no encontrado. Solo los admins pueden acceder.';
+    if (hashPwd(pwd) !== ADMIN_CREDENTIALS[username]) { errEl.textContent = 'Contraseña incorrecta.'; return; }
+    loginSuccess(username, 'admin', 'admin_' + username);
+    return;
   }
+
+  // Usuario registrado
+  errEl.textContent = 'Verificando...';
+  try {
+    const rows = await sb.getWhere('users', 'username', username);
+    if (rows.length === 0) { errEl.textContent = 'Usuario no encontrado.'; return; }
+    const user = rows[0];
+    if (user.password_hash !== hashPwd(pwd)) { errEl.textContent = 'Contraseña incorrecta.'; return; }
+    await loginSuccess(username, 'user', user.id);
+  } catch(e) { errEl.textContent = 'Error al conectar: ' + e.message; }
+}
+
+// ════════════════════════════════════════════
+//  AUTH — REGISTRO
+// ════════════════════════════════════════════
+async function doRegister() {
+  const username = document.getElementById('regUser').value.trim().toLowerCase();
+  const pwd = document.getElementById('regPass').value;
+  const pwd2 = document.getElementById('regPass2').value;
+  const errEl = document.getElementById('registerError');
+
+  if (!username || !pwd) { errEl.textContent = 'Completá todos los campos.'; return; }
+  if (username.length < 3) { errEl.textContent = 'El usuario debe tener al menos 3 caracteres.'; return; }
+  if (pwd.length < 4) { errEl.textContent = 'La contraseña debe tener al menos 4 caracteres.'; return; }
+  if (pwd !== pwd2) { errEl.textContent = 'Las contraseñas no coinciden.'; return; }
+  if (ADMIN_CREDENTIALS.hasOwnProperty(username)) { errEl.textContent = 'Ese nombre de usuario no está disponible.'; return; }
+
+  errEl.textContent = 'Creando cuenta...';
+  try {
+    const existing = await sb.getWhere('users', 'username', username);
+    if (existing.length > 0) { errEl.textContent = 'Ese nombre de usuario ya existe.'; return; }
+
+    const id = 'u_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    await sb.upsert('users', { id, username, password_hash: hashPwd(pwd) });
+    // Crear user_data inicial
+    await sb.upsert('user_data', { user_id: id, favorites: [], read_map: {}, continue_map: {} });
+    toast('✓ Cuenta creada. Iniciando sesión...');
+    await loginSuccess(username, 'user', id);
+  } catch(e) { errEl.textContent = 'Error: ' + e.message; }
 }
 
 function continueAsGuest() {
-  S.currentUser = { username: 'guest', role: 'user' };
+  S.currentUser = { username: 'guest', role: 'user', id: null };
   S.readMap = JSON.parse(localStorage.getItem('nt_read') || '{}');
   S.continueMap = JSON.parse(localStorage.getItem('nt_continue') || '{}');
+  S.favorites = JSON.parse(localStorage.getItem('nt_favorites') || '[]');
   document.getElementById('authGate').classList.remove('open');
   updateNavUser();
   loadData().then(() => {
@@ -704,29 +886,121 @@ function continueAsGuest() {
   toast('Bienvenido, invitado');
 }
 
-async function loginSuccess(username, role) {
-  S.currentUser = { username, role };
+async function loginSuccess(username, role, id) {
+  S.currentUser = { username, role, id };
   localStorage.setItem('nt_session', username);
   document.getElementById('authGate').classList.remove('open');
-  loadLocalPrefs();
-  updateNavUser();
-  if (role === 'admin') { S.admin = true; updateAdminUI(); toast('✓ Bienvenido, ' + username + ' (admin)'); }
-  else { toast('✓ Bienvenido, ' + username); }
+  if (role === 'admin') {
+    S.admin = true;
+    loadLocalPrefs();
+    updateNavUser(); updateAdminUI();
+    toast('✓ Bienvenido, ' + username + ' (admin)');
+  } else {
+    await loadUserData();
+    updateNavUser();
+    toast('✓ Bienvenido, ' + username);
+  }
   document.getElementById('loadingOverlay').style.display = 'flex';
   await loadData();
   document.getElementById('loadingOverlay').style.display = 'none';
   renderHome();
+  if (S.admin) updateAdminBadge();
 }
 
 function logoutUser() {
-  persistLocalPrefs();
-  S.currentUser = null; S.admin = false;
+  if (S.currentUser && S.currentUser.role !== 'admin' && S.currentUser.id === null) {
+    // guest: guardar en localStorage
+    localStorage.setItem('nt_read', JSON.stringify(S.readMap));
+    localStorage.setItem('nt_continue', JSON.stringify(S.continueMap));
+    localStorage.setItem('nt_favorites', JSON.stringify(S.favorites));
+  }
+  if (S.admin) persistLocalPrefs();
+  S.currentUser = null; S.admin = false; S.readMap = {}; S.continueMap = {}; S.favorites = [];
   localStorage.removeItem('nt_session');
   closeUserMenu(); updateNavUser(); updateAdminUI(); renderHome();
   document.getElementById('loginUser').value = '';
   document.getElementById('loginPass').value = '';
   document.getElementById('loginError').textContent = '';
+  switchAuthTab('login');
   document.getElementById('authGate').classList.add('open');
+}
+
+// ════════════════════════════════════════════
+//  USER DATA (Supabase para registrados)
+// ════════════════════════════════════════════
+async function loadUserData() {
+  if (!S.currentUser || !S.currentUser.id || S.currentUser.id === null) return;
+  if (S.currentUser.role === 'admin') { loadLocalPrefs(); return; }
+  try {
+    const rows = await sb.getWhere('user_data', 'user_id', S.currentUser.id);
+    if (rows.length > 0) {
+      const d = rows[0];
+      S.readMap = d.read_map || {};
+      S.continueMap = d.continue_map || {};
+      S.favorites = d.favorites || [];
+    }
+    // Preferencias visuales siguen en localStorage
+    const p = JSON.parse(localStorage.getItem('nt_prefs_' + S.currentUser.username) || '{}');
+    if (p.fontSize) S.fontSize = p.fontSize;
+    if (p.fontFamily) S.fontFamily = p.fontFamily;
+    if (p.readerWidth) S.readerWidth = p.readerWidth;
+    if (p.lineHeight) S.lineHeight = p.lineHeight;
+    if (p.dark !== undefined) { S.dark = p.dark; document.body.classList.toggle('dark', S.dark); localStorage.setItem('nt_dark', S.dark ? '1' : '0'); }
+  } catch(e) { console.warn('No se pudo cargar user_data', e); }
+}
+
+async function saveUserData() {
+  if (!S.currentUser || !S.currentUser.id) return;
+  if (S.currentUser.id === null) {
+    // Guest: localStorage
+    localStorage.setItem('nt_read', JSON.stringify(S.readMap));
+    localStorage.setItem('nt_continue', JSON.stringify(S.continueMap));
+    localStorage.setItem('nt_favorites', JSON.stringify(S.favorites));
+    return;
+  }
+  if (S.currentUser.role === 'admin') { persistLocalPrefs(); return; }
+  try {
+    await sb.upsert('user_data', {
+      user_id: S.currentUser.id,
+      favorites: S.favorites,
+      read_map: S.readMap,
+      continue_map: S.continueMap
+    });
+    // Prefs visuales en localStorage
+    persistLocalPrefs();
+  } catch(e) { console.warn('No se pudo guardar user_data', e); }
+}
+
+// ════════════════════════════════════════════
+//  LOCAL PREFS (solo preferencias visuales)
+// ════════════════════════════════════════════
+function loadLocalPrefs() {
+  if (!S.currentUser) return;
+  const p = JSON.parse(localStorage.getItem('nt_prefs_' + S.currentUser.username) || '{}');
+  if (p.fontSize) S.fontSize = p.fontSize;
+  if (p.fontFamily) S.fontFamily = p.fontFamily;
+  if (p.readerWidth) S.readerWidth = p.readerWidth;
+  if (p.lineHeight) S.lineHeight = p.lineHeight;
+  if (p.dark !== undefined) { S.dark = p.dark; document.body.classList.toggle('dark', S.dark); localStorage.setItem('nt_dark', S.dark ? '1' : '0'); }
+  // Admins guardan todo en local
+  if (S.currentUser.role === 'admin') {
+    const adm = JSON.parse(localStorage.getItem('nt_admin_' + S.currentUser.username) || '{}');
+    if (adm.readMap) S.readMap = adm.readMap;
+    if (adm.continueMap) S.continueMap = adm.continueMap;
+    if (adm.favorites) S.favorites = adm.favorites;
+  }
+}
+function persistLocalPrefs() {
+  if (!S.currentUser) return;
+  localStorage.setItem('nt_prefs_' + S.currentUser.username, JSON.stringify({
+    fontSize: S.fontSize, fontFamily: S.fontFamily,
+    readerWidth: S.readerWidth, lineHeight: S.lineHeight, dark: S.dark
+  }));
+  if (S.currentUser.role === 'admin') {
+    localStorage.setItem('nt_admin_' + S.currentUser.username, JSON.stringify({
+      readMap: S.readMap, continueMap: S.continueMap, favorites: S.favorites
+    }));
+  }
 }
 
 function updateNavUser() {
@@ -736,11 +1010,11 @@ function updateNavUser() {
   const ddRole = document.getElementById('ddRole');
   if (S.currentUser) {
     const u = S.currentUser.username;
-    av.textContent = u.charAt(0).toUpperCase();
+    av.textContent = u === 'guest' ? '?' : u.charAt(0).toUpperCase();
     nm.textContent = u === 'guest' ? 'Invitado' : u;
     ddName.textContent = u === 'guest' ? 'Invitado' : u;
-    ddRole.textContent = S.currentUser.role === 'admin' ? '⭐ Administrador' : 'Lector';
-    av.style.background = S.currentUser.role === 'admin' ? 'var(--accent)' : '#5a8a6a';
+    ddRole.textContent = S.currentUser.role === 'admin' ? '⭐ Administrador' : (u === 'guest' ? 'Invitado' : 'Lector');
+    av.style.background = S.currentUser.role === 'admin' ? 'var(--accent)' : (u === 'guest' ? '#888' : '#5a8a6a');
   } else {
     av.textContent = '?'; nm.textContent = 'Entrar';
     ddName.textContent = '–'; ddRole.textContent = '–';
@@ -756,48 +1030,228 @@ function toggleUserMenu() {
 }
 function closeUserMenu() { document.getElementById('userDropdown').classList.remove('open'); }
 
-function openUserPrefs() {
+// ════════════════════════════════════════════
+//  PERFIL DE USUARIO
+// ════════════════════════════════════════════
+function openUserProfile() {
   closeUserMenu();
-  if (!S.currentUser || S.currentUser.username === 'guest') { toast('Iniciá sesión primero'); return; }
-  document.getElementById('prefUsername').value = S.currentUser.username;
-  openModal('modalPrefs');
-}
-function savePrefs() {
-  persistLocalPrefs();
-  closeModal('modalPrefs');
-  toast('✓ Preferencias guardadas');
+  if (!S.currentUser) return;
+  if (S.currentUser.username === 'guest') { toast('Creá una cuenta para tener perfil'); return; }
+  document.getElementById('profileTitle').textContent = '👤 ' + S.currentUser.username;
+  renderProfileStats();
+  switchProfileTab('stats');
+  openModal('modalProfile');
 }
 
+function switchProfileTab(tab) {
+  document.querySelectorAll('#modalProfile .modal-tab').forEach((b,i) => {
+    b.classList.toggle('active', ['stats','favorites','history'][i] === tab);
+  });
+  document.querySelectorAll('#modalProfile .modal-tab-panel').forEach((p,i) => {
+    p.classList.toggle('active', ['stats','favorites','history'][i] === tab);
+  });
+  if (tab === 'favorites') renderProfileFavorites();
+  if (tab === 'history') renderProfileHistory();
+}
+
+function renderProfileStats() {
+  const readCount = Object.keys(S.readMap).filter(k => S.readMap[k]).length;
+  const favCount = S.favorites.length;
+  const novelsStarted = S.novels.filter(n => (n.chapters||[]).some(c => S.readMap[c.id])).length;
+  document.getElementById('profileStats').innerHTML = `
+    <div style="margin-bottom:1rem">
+      <div class="profile-stat"><span>Capítulos leídos</span><span>${readCount}</span></div>
+      <div class="profile-stat"><span>Novelas iniciadas</span><span>${novelsStarted}</span></div>
+      <div class="profile-stat"><span>Favoritos</span><span>${favCount}</span></div>
+      <div class="profile-stat"><span>Tipo de cuenta</span><span>${S.currentUser.role === 'admin' ? '⭐ Admin' : 'Lector'}</span></div>
+    </div>`;
+}
+
+function renderProfileFavorites() {
+  const el = document.getElementById('profileFavorites');
+  const favNovels = S.novels.filter(n => S.favorites.includes(n.id));
+  if (!favNovels.length) { el.innerHTML = '<p style="color:var(--text3);font-size:.85rem;font-style:italic;grid-column:1/-1">Sin favoritos aún.</p>'; return; }
+  el.innerHTML = favNovels.map(n => novelMiniCard(n)).join('');
+}
+
+function renderProfileHistory() {
+  const el = document.getElementById('profileHistory');
+  const started = S.novels.filter(n => (n.chapters||[]).some(c => S.readMap[c.id]));
+  if (!started.length) { el.innerHTML = '<p style="color:var(--text3);font-size:.85rem;font-style:italic;grid-column:1/-1">Sin historial aún.</p>'; return; }
+  el.innerHTML = started.map(n => {
+    const readChs = (n.chapters||[]).filter(c => S.readMap[c.id]).length;
+    const total = (n.chapters||[]).length;
+    return novelMiniCard(n, `${readChs}/${total} caps.`);
+  }).join('');
+}
+
+function novelMiniCard(n, subtitle) {
+  return `<div class="profile-novel-card" onclick="closeModal('modalProfile');openNovel('${n.id}')">
+    <div class="novel-cover">
+      ${n.cover ? `<img src="${n.cover}" alt="${esc(n.title)}" loading="lazy">` : `<div class="novel-cover-ph">${n.title.charAt(0)}</div>`}
+    </div>
+    <div class="pnc-title">${esc(n.title)}</div>
+    ${subtitle ? `<div class="pnc-progress">${subtitle}</div>` : ''}
+  </div>`;
+}
+
+// ════════════════════════════════════════════
+//  FAVORITOS
+// ════════════════════════════════════════════
+function toggleFavorite() {
+  if (!S.currentUser || S.currentUser.username === 'guest') { toast('Iniciá sesión para guardar favoritos'); return; }
+  const idx = S.favorites.indexOf(S.novelId);
+  if (idx === -1) { S.favorites.push(S.novelId); toast('♥ Agregado a favoritos'); }
+  else { S.favorites.splice(idx, 1); toast('Quitado de favoritos'); }
+  saveUserData();
+  updateFavBtn();
+  renderHome();
+}
+
+function updateFavBtn() {
+  const btn = document.getElementById('favBtn');
+  if (!btn) return;
+  const isFav = S.favorites.includes(S.novelId);
+  btn.classList.toggle('active', isFav);
+  btn.textContent = isFav ? '♥ Favorito' : '♡ Favorito';
+}
+
+// ════════════════════════════════════════════
+//  ADMIN PANEL
+// ════════════════════════════════════════════
 function openAdminPanel() {
   closeUserMenu();
+  switchAdminTab('backup');
   openModal('modalAdmin');
 }
 
-// ════════════════════════════════════════════
-//  LOCAL PREFS (lectura/continuar — por usuario)
-// ════════════════════════════════════════════
-function loadLocalPrefs() {
-  if (!S.currentUser) return;
-  const p = JSON.parse(localStorage.getItem('nt_prefs_' + S.currentUser.username) || '{}');
-  if (p.fontSize) S.fontSize = p.fontSize;
-  if (p.fontFamily) S.fontFamily = p.fontFamily;
-  if (p.readerWidth) S.readerWidth = p.readerWidth;
-  if (p.lineHeight) S.lineHeight = p.lineHeight;
-  if (p.readMap) S.readMap = p.readMap;
-  if (p.continueMap) S.continueMap = p.continueMap;
-  if (p.dark !== undefined) {
-    S.dark = p.dark;
-    document.body.classList.toggle('dark', S.dark);
-    localStorage.setItem('nt_dark', S.dark ? '1' : '0');
-  }
+function switchAdminTab(tab) {
+  const tabs = ['backup','reports','admins'];
+  document.querySelectorAll('#modalAdmin .modal-tab').forEach((b,i) => b.classList.toggle('active', tabs[i] === tab));
+  document.querySelectorAll('#modalAdmin .modal-tab-panel').forEach((p,i) => p.classList.toggle('active', tabs[i] === tab));
+  if (tab === 'reports') loadReports();
 }
-function persistLocalPrefs() {
-  if (!S.currentUser || S.currentUser.username === 'guest') return;
-  localStorage.setItem('nt_prefs_' + S.currentUser.username, JSON.stringify({
-    fontSize: S.fontSize, fontFamily: S.fontFamily,
-    readerWidth: S.readerWidth, lineHeight: S.lineHeight,
-    dark: S.dark, readMap: S.readMap, continueMap: S.continueMap
-  }));
+
+async function updateAdminBadge() {
+  try {
+    const rows = await sb.query('error_reports?resolved=eq.false&select=id') || [];
+    const count = rows.length;
+    ['adminBadge','adminBadgeModal'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.textContent = count;
+      el.classList.toggle('show', count > 0);
+    });
+  } catch(e) {}
+}
+
+async function loadReports() {
+  const container = document.getElementById('reportsContainer');
+  container.innerHTML = '<p style="color:var(--text3);font-size:.85rem;font-style:italic">Cargando...</p>';
+  try {
+    const rows = await sb.query('error_reports?order=created_at.desc&select=*') || [];
+    await updateAdminBadge();
+    if (!rows.length) { container.innerHTML = '<p style="color:var(--text3);font-size:.85rem;font-style:italic">No hay reportes todavía.</p>'; return; }
+    container.innerHTML = rows.map(r => `
+      <div class="report-item ${r.resolved ? 'report-resolved' : ''}" id="report-${r.id}">
+        <div class="report-item-header">
+          <div>
+            <div class="report-item-title">${esc(r.novel_title||'Novela')} — Cap. ${r.chapter_num||'?'}</div>
+            <div class="report-item-meta">Por ${esc(r.reporter||'invitado')} · ${r.created_at ? new Date(r.created_at).toLocaleDateString('es-PY') : ''} ${r.resolved ? '· ✓ Resuelto' : ''}</div>
+          </div>
+        </div>
+        ${r.selected_text ? `<div class="report-item-text">"${esc(r.selected_text)}"</div>` : ''}
+        ${r.comment ? `<div class="report-item-comment">💬 ${esc(r.comment)}</div>` : ''}
+        <div class="report-item-actions">
+          <button class="btn btn-secondary btn-sm" onclick="goToReport('${r.novel_id}','${r.chapter_id}')">→ Ir al capítulo</button>
+          ${!r.resolved ? `<button class="btn btn-sm" style="background:var(--success-bg);color:var(--success);border:1px solid rgba(45,106,79,.2)" onclick="resolveReport('${r.id}')">✓ Marcar resuelto</button>` : ''}
+          <button class="btn btn-danger btn-sm" onclick="deleteReport('${r.id}')">✕</button>
+        </div>
+      </div>`).join('');
+  } catch(e) { container.innerHTML = '<p style="color:var(--danger);font-size:.85rem">Error cargando reportes: ' + e.message + '</p>'; }
+}
+
+async function resolveReport(id) {
+  try {
+    await sb.query('error_reports?id=eq.' + id, {
+      method: 'PATCH',
+      headers: { 'Prefer': 'return=minimal' },
+      body: { resolved: true }
+    });
+    loadReports();
+    toast('✓ Marcado como resuelto');
+  } catch(e) { toast('Error: ' + e.message, 3000); }
+}
+
+async function deleteReport(id) {
+  openConfirm('¿Eliminar este reporte?', async () => {
+    await sb.delete('error_reports', id);
+    loadReports();
+    toast('Reporte eliminado');
+  });
+}
+
+function goToReport(novelId, chapterId) {
+  closeModal('modalAdmin');
+  openChapter(novelId, chapterId);
+}
+
+// ════════════════════════════════════════════
+//  CONTEXT MENU — REPORTAR ERROR
+// ════════════════════════════════════════════
+function handleContextMenu(e) {
+  const menu = document.getElementById('ctxMenu');
+  menu.classList.remove('open');
+
+  // Solo en el reader
+  if (!document.getElementById('page-reader').classList.contains('active')) return;
+
+  const selection = window.getSelection();
+  const selectedText = selection ? selection.toString().trim() : '';
+  if (!selectedText) return;
+
+  e.preventDefault();
+  S.reportSelection = selectedText;
+
+  // Posicionar el menú
+  const x = Math.min(e.clientX, window.innerWidth - 200);
+  const y = Math.min(e.clientY, window.innerHeight - 80);
+  menu.style.left = x + 'px';
+  menu.style.top = y + 'px';
+  menu.classList.add('open');
+}
+
+function openReportModal() {
+  document.getElementById('ctxMenu').classList.remove('open');
+  if (!S.reportSelection) return;
+  // Truncar si es muy largo
+  const display = S.reportSelection.length > 200 ? S.reportSelection.slice(0, 200) + '…' : S.reportSelection;
+  document.getElementById('reportSelectedText').textContent = display;
+  document.getElementById('reportComment').value = '';
+  openModal('modalReport');
+}
+
+async function submitReport() {
+  if (!S.chapterId || !S.novelId) return;
+  const novel = S.novels.find(n => n.id === S.novelId);
+  const chMeta = novel ? (novel.chapters||[]).find(c => c.id === S.chapterId) : null;
+  const report = {
+    id: 'r_' + Date.now() + '_' + Math.random().toString(36).slice(2),
+    novel_id: S.novelId,
+    novel_title: novel ? novel.title : '',
+    chapter_id: S.chapterId,
+    chapter_num: chMeta ? chMeta.num : null,
+    selected_text: S.reportSelection.slice(0, 500),
+    comment: document.getElementById('reportComment').value.trim(),
+    reporter: S.currentUser ? S.currentUser.username : 'invitado',
+    resolved: false
+  };
+  try {
+    await sb.upsert('error_reports', report);
+    closeModal('modalReport');
+    toast('✓ Reporte enviado, gracias');
+    S.reportSelection = '';
+  } catch(e) { toast('Error enviando reporte: ' + e.message, 3000); }
 }
 
 // ════════════════════════════════════════════
@@ -809,7 +1263,6 @@ async function loadData() {
 }
 
 async function saveNovelToDb(novel) {
-  // Save novel meta (without full chapter text)
   const meta = { ...novel };
   if (meta.chapters) {
     meta.chapters = meta.chapters.map(c => ({
@@ -828,23 +1281,18 @@ async function loadChapterContent(chId) {
   const novel = S.novels.find(n => (n.chapters||[]).find(c => c.id === chId));
   if (!novel) return null;
   const ch = novel.chapters.find(c => c.id === chId);
-  // Already loaded?
   if (ch && ch.text !== undefined) return ch;
-  // Load from Supabase
   const row = await sb.getOne('chapters', chId);
-  if (row && row.data && ch) {
-    Object.assign(ch, row.data);
-  }
+  if (row && row.data && ch) { Object.assign(ch, row.data); }
   return ch || (row && row.data) || null;
 }
 
 // ════════════════════════════════════════════
-//  EXPORT / IMPORT (solo admin)
+//  EXPORT / IMPORT
 // ════════════════════════════════════════════
 async function exportData() {
   toast('Exportando...', 1500);
   try {
-    // Load all chapters
     const novelsWithChapters = [];
     for (const novel of S.novels) {
       const fullNovel = { ...novel, chapters: [] };
@@ -860,9 +1308,7 @@ async function exportData() {
     a.download = 'gogofansub_backup_' + new Date().toISOString().slice(0,10) + '.json';
     a.click();
     toast('✓ Exportado correctamente');
-  } catch(e) {
-    toast('Error exportando: ' + e.message, 4000);
-  }
+  } catch(e) { toast('Error exportando: ' + e.message, 4000); }
 }
 
 async function importData(input) {
@@ -871,30 +1317,19 @@ async function importData(input) {
   let parsed;
   try { parsed = JSON.parse(text); } catch { toast('Archivo JSON inválido', 3000); return; }
   const novels = parsed.novels || [];
-  if (!novels.length) { toast('No se encontraron novelas en el archivo', 3000); return; }
-
-  openConfirm(`¿Importar ${novels.length} novela(s)? Los datos existentes con el mismo ID serán reemplazados.`, async () => {
+  if (!novels.length) { toast('No se encontraron novelas', 3000); return; }
+  openConfirm(`¿Importar ${novels.length} novela(s)?`, async () => {
     toast('Importando...', 3000);
     try {
       for (const novel of novels) {
         const chapters = novel.chapters || [];
-        // Save novel meta FIRST (foreign key requirement)
-        const meta = { ...novel, chapters: chapters.map(c => ({
-          id: c.id, num: c.num, title: c.title,
-          date: c.date, hasImages: c.hasImages || false
-        }))};
+        const meta = { ...novel, chapters: chapters.map(c => ({ id: c.id, num: c.num, title: c.title, date: c.date, hasImages: c.hasImages || false })) };
         await sb.upsert('novels', { id: novel.id, data: meta, updated_at: new Date().toISOString() });
-        // THEN save chapters
-        for (const ch of chapters) {
-          await saveChapterToDb({ ...ch, novelId: novel.id });
-        }
+        for (const ch of chapters) { await saveChapterToDb({ ...ch, novelId: novel.id }); }
       }
-      await loadData();
-      renderHome();
+      await loadData(); renderHome();
       toast('✓ Importado: ' + novels.length + ' novela(s)');
-    } catch(e) {
-      toast('Error importando: ' + e.message, 5000);
-    }
+    } catch(e) { toast('Error importando: ' + e.message, 5000); }
   });
   input.value = '';
 }
@@ -926,10 +1361,7 @@ function updateAdminUI() {
     el.style.display = S.admin ? 'inline-flex' : 'none';
   });
   const sec = document.getElementById('chapterSection');
-  if (sec) {
-    if (S.admin) sec.classList.add('admin-active');
-    else sec.classList.remove('admin-active');
-  }
+  if (sec) { if (S.admin) sec.classList.add('admin-active'); else sec.classList.remove('admin-active'); }
 }
 
 // ════════════════════════════════════════════
@@ -939,8 +1371,7 @@ let _filteredNovels = null;
 function renderHome() {
   const novels = _filteredNovels || S.novels;
   const grid = document.getElementById('novelsGrid');
-  document.getElementById('novelCount').textContent =
-    novels.length + (novels.length === 1 ? ' novela' : ' novelas');
+  document.getElementById('novelCount').textContent = novels.length + (novels.length === 1 ? ' novela' : ' novelas');
   updateAdminUI();
   if (novels.length === 0) {
     grid.innerHTML = `<div class="empty-state"><p>${_filteredNovels ? 'Sin resultados.' : 'Aún no hay novelas.'}</p></div>`;
@@ -951,11 +1382,13 @@ function renderHome() {
     const continueId = S.continueMap[n.id];
     const lastCh = continueId ? (n.chapters||[]).find(c => c.id === continueId) : null;
     const statusClass = {'En traducción':'status-active','Completada':'status-done','Pausada':'status-paused','Abandonada':'status-drop'}[n.status]||'';
+    const isFav = S.favorites.includes(n.id);
     return `
     <div class="novel-card" onclick="openNovel('${n.id}')">
       <div class="novel-cover">
         ${n.cover ? `<img src="${n.cover}" alt="${esc(n.title)}" loading="lazy">` : `<div class="novel-cover-ph">${n.title.charAt(0)}</div>`}
         ${lastCh ? `<div class="continue-badge">Cap. ${lastCh.num}</div>` : ''}
+        ${isFav ? `<div class="fav-badge">♥</div>` : ''}
       </div>
       <div class="novel-card-title">${esc(n.title)}</div>
       <div class="novel-card-meta">
@@ -970,8 +1403,7 @@ function filterNovels(q) {
   if (!q.trim()) { _filteredNovels = null; }
   else {
     const lq = q.toLowerCase();
-    _filteredNovels = S.novels.filter(n =>
-      n.title.toLowerCase().includes(lq) || (n.tags||'').toLowerCase().includes(lq) || (n.author||'').toLowerCase().includes(lq));
+    _filteredNovels = S.novels.filter(n => n.title.toLowerCase().includes(lq) || (n.tags||'').toLowerCase().includes(lq) || (n.author||'').toLowerCase().includes(lq));
   }
   renderHome();
 }
@@ -999,6 +1431,7 @@ async function renderNovelPage(id) {
   document.getElementById('ndChCount').textContent = chapters.length;
   document.getElementById('ndStatus').textContent = novel.status || '';
   if (novel.createdAt) { document.getElementById('ndDate').style.display=''; document.getElementById('ndDateVal').textContent=novel.createdAt; }
+  updateFavBtn();
   updateAdminUI();
   const sec = document.getElementById('chapterSection');
   if (S.admin) sec.classList.add('admin-active'); else sec.classList.remove('admin-active');
@@ -1034,7 +1467,7 @@ async function renderNovelPage(id) {
 async function openChapter(novelId, chapterId) {
   S.novelId = novelId; S.chapterId = chapterId;
   S.continueMap[novelId] = chapterId;
-  persistLocalPrefs();
+  saveUserData();
   await renderReader(); showPage('reader');
 }
 async function renderReader() {
@@ -1044,7 +1477,7 @@ async function renderReader() {
   const ch = await loadChapterContent(S.chapterId);
   if (!ch) return;
   S.readMap[ch.id] = true;
-  persistLocalPrefs();
+  saveUserData();
   document.getElementById('rNovelTitle').textContent = novel.title;
   document.getElementById('rChTitle').textContent = ch.title ? `Capítulo ${ch.num}: ${ch.title}` : `Capítulo ${ch.num}`;
   document.getElementById('rChNum').textContent = ch.num;
@@ -1057,9 +1490,7 @@ async function renderReader() {
   document.getElementById('readerContent').style.maxWidth = S.readerWidth + 'px';
   document.getElementById('readerNav').style.maxWidth = S.readerWidth + 'px';
   let html = parseText(ch.text || '', ch.images || []);
-  if (ch.notes) {
-    html += `<div class="translator-note"><strong>Nota del traductor</strong>${esc(ch.notes).replace(/\n/g,'<br>')}</div>`;
-  }
+  if (ch.notes) { html += `<div class="translator-note"><strong>Nota del traductor</strong>${esc(ch.notes).replace(/\n/g,'<br>')}</div>`; }
   body.innerHTML = html;
   const idx = chapters.findIndex(c => c.id === S.chapterId);
   document.getElementById('prevBtn').disabled = idx <= 0;
@@ -1084,10 +1515,7 @@ async function navigateChapter(dir) {
   const chapters = (novel.chapters||[]).sort((a,b) => a.num - b.num);
   const idx = chapters.findIndex(c => c.id === S.chapterId);
   const next = chapters[idx + dir];
-  if (next) {
-    S.chapterId = next.id; S.continueMap[S.novelId] = next.id;
-    persistLocalPrefs(); await renderReader(); window.scrollTo(0,0);
-  }
+  if (next) { S.chapterId = next.id; S.continueMap[S.novelId] = next.id; saveUserData(); await renderReader(); window.scrollTo(0,0); }
 }
 function goBackToNovel() { showPage('novel'); renderNovelPage(S.novelId); }
 function updateProgressBar() {
@@ -1210,10 +1638,7 @@ function clearNovelForm() {
 function previewCover(input) {
   if (!input.files[0]) return;
   const reader = new FileReader();
-  reader.onload = e => {
-    document.getElementById('coverPreviewImg').src = e.target.result;
-    document.getElementById('coverPreview').style.display = 'block';
-  };
+  reader.onload = e => { document.getElementById('coverPreviewImg').src = e.target.result; document.getElementById('coverPreview').style.display = 'block'; };
   reader.readAsDataURL(input.files[0]);
 }
 async function saveNovel() {
@@ -1223,8 +1648,7 @@ async function saveNovel() {
   let cover = (img.src && img.src.startsWith('data:')) ? img.src : '';
   if (S.editingNovelId) {
     const novel = S.novels.find(n => n.id === S.editingNovelId);
-    novel.title = title;
-    novel.author = document.getElementById('nAuthor').value.trim();
+    novel.title = title; novel.author = document.getElementById('nAuthor').value.trim();
     novel.synopsis = document.getElementById('nSynopsis').value.trim();
     novel.tags = document.getElementById('nTags').value.trim();
     novel.notes = document.getElementById('nNotes').value.trim();
@@ -1234,14 +1658,10 @@ async function saveNovel() {
     closeModal('modalNovel'); renderNovelPage(S.editingNovelId); renderHome(); toast('✓ Novela actualizada');
   } else {
     const id = 'n_' + Date.now();
-    const novel = { id, title,
-      author: document.getElementById('nAuthor').value.trim(),
-      synopsis: document.getElementById('nSynopsis').value.trim(),
-      tags: document.getElementById('nTags').value.trim(),
-      notes: document.getElementById('nNotes').value.trim(),
-      status: document.getElementById('nStatus').value,
-      cover, chapters: [], createdAt: new Date().toLocaleDateString('es-PY')
-    };
+    const novel = { id, title, author: document.getElementById('nAuthor').value.trim(),
+      synopsis: document.getElementById('nSynopsis').value.trim(), tags: document.getElementById('nTags').value.trim(),
+      notes: document.getElementById('nNotes').value.trim(), status: document.getElementById('nStatus').value,
+      cover, chapters: [], createdAt: new Date().toLocaleDateString('es-PY') };
     S.novels.push(novel);
     await saveNovelToDb(novel);
     closeModal('modalNovel'); renderHome(); toast('✓ Novela agregada');
@@ -1250,12 +1670,7 @@ async function saveNovel() {
 function confirmDeleteNovel() {
   openConfirm('¿Eliminar esta novela y todos sus capítulos?', async () => {
     const novel = S.novels.find(n => n.id === S.novelId);
-    if (novel) {
-      for (const ch of (novel.chapters || [])) {
-        await sb.delete('chapters', ch.id);
-      }
-      await sb.delete('novels', S.novelId);
-    }
+    if (novel) { for (const ch of (novel.chapters || [])) { await sb.delete('chapters', ch.id); } await sb.delete('novels', S.novelId); }
     S.novels = S.novels.filter(n => n.id !== S.novelId);
     showPage('home'); renderHome(); toast('Novela eliminada');
   });
@@ -1355,13 +1770,10 @@ async function saveChapter() {
     }
   } else {
     const id = 'c_' + Date.now();
-    const ch = { id, num,
-      title: document.getElementById('cTitle').value.trim(),
+    const ch = { id, num, title: document.getElementById('cTitle').value.trim(),
       text, notes: document.getElementById('cNotes').value.trim(),
       images: savedImages, hasImages: savedImages.length > 0,
-      date: new Date().toLocaleDateString('es-PY'),
-      novelId: novel.id
-    };
+      date: new Date().toLocaleDateString('es-PY'), novelId: novel.id };
     novel.chapters.push(ch);
     await saveChapterToDb(ch);
     await saveNovelToDb(novel);
@@ -1392,6 +1804,18 @@ function openConfirm(msg, cb) {
 document.querySelectorAll('.modal-overlay').forEach(el => {
   el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
 });
+
+// ════════════════════════════════════════════
+//  PROFILE TABS (helper)
+// ════════════════════════════════════════════
+function switchProfileTab(tab) {
+  const tabs = ['stats','favorites','history'];
+  document.querySelectorAll('#modalProfile .modal-tab').forEach((b,i) => b.classList.toggle('active', tabs[i] === tab));
+  document.querySelectorAll('#modalProfile .modal-tab-panel').forEach((p,i) => p.classList.toggle('active', tabs[i] === tab));
+  if (tab === 'favorites') renderProfileFavorites();
+  if (tab === 'history') renderProfileHistory();
+  if (tab === 'stats') renderProfileStats();
+}
 
 // ════════════════════════════════════════════
 //  TOAST
