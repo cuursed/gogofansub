@@ -510,6 +510,36 @@
     </div>
   </div>
 
+  <!-- MODAL: Recortar Foto de Perfil -->
+  <div class="modal-overlay" id="modalCrop" style="z-index: 10000;">
+    <div class="modal" style="max-width: 360px; padding: 1.5rem; text-align: center;">
+      <h2 style="margin-bottom: 0.5rem;">✂️ Recortar Foto</h2>
+      <p style="font-size: 0.78rem; color: var(--text3); margin-bottom: 1.2rem; line-height: 1.4;">
+        Arrastrá la imagen y usá el slider para encuadrar tu foto en el círculo.
+      </p>
+      
+      <div class="crop-workspace-container" style="display: flex; justify-content: center; margin-bottom: 1.2rem;">
+        <div id="cropWorkspace" style="width: 260px; height: 260px; position: relative; overflow: hidden; background: #110e09; border-radius: 8px; border: 1px solid var(--border2); user-select: none; touch-action: none; cursor: move;">
+          <img id="cropImg" src="" style="position: absolute; top: 0; left: 0; transform-origin: 0 0; cursor: move; max-width: none; max-height: none; user-select: none; pointer-events: none;" />
+          <div class="crop-mask" style="position: absolute; inset: 0; border-radius: 50%; box-shadow: 0 0 0 9999px rgba(17,14,9,0.75); pointer-events: none; border: 2px dashed var(--accent); box-sizing: border-box;"></div>
+        </div>
+      </div>
+      
+      <div class="field" style="margin-bottom: 1.2rem; padding: 0 5px; text-align: left;">
+        <label style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text3); margin-bottom: 6px;">
+          <span>Zoom</span>
+          <span id="zoomPercent">100%</span>
+        </label>
+        <input type="range" id="cropZoom" min="0.1" max="3" step="0.01" value="1" style="width: 100%; accent-color: var(--accent); cursor: pointer;" />
+      </div>
+      
+      <div class="modal-footer" style="padding-top: 1rem; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; margin-top: 0;">
+        <button class="btn btn-secondary" onclick="cancelCrop()">Cancelar</button>
+        <button class="btn btn-primary" onclick="confirmCrop()">Recortar</button>
+      </div>
+    </div>
+  </div>
+
   <!-- CONFIRM -->
   <div class="modal-overlay" id="modalConfirm">
     <div class="confirm-box">

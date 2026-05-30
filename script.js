@@ -228,6 +228,9 @@ async function init() {
 
   // Context menu en lector
   document.addEventListener('contextmenu', handleContextMenu);
+  
+  // Inicializar manejadores del recortador de avatar
+  setupCropperEvents();
 }
 
 // ════════════════════════════════════════════
@@ -1428,9 +1431,241 @@ function renderProfileAvatarPreview() {
 
 function loadProfileAvatar(input) {
   if (!input.files[0]) return;
+  handleAvatarUpload(input.files[0], false);
+  input.value = '';
+}
+
+// ════════════════════════════════════════════
+//  CROP & UPLOAD AVATAR ENGINE
+// ════════════════════════════════════════════
+let cropState = {
+  imgSrc: '',
+  scale: 1,
+  minScale: 0.1,
+  maxScale: 3,
+  offsetX: 0,
+  offsetY: 0,
+  origW: 0,
+  origH: 0,
+  isDragging: false,
+  startX: 0,
+  startY: 0,
+  startOffsetX: 0,
+  startOffsetY: 0,
+  callback: null
+};
+
+function handleAvatarUpload(file, isAdmin) {
+  if (!file) return;
+
+  // 1. Validar límite de 700MB
+  const maxBytes = 700 * 1024 * 1024;
+  if (file.size > maxBytes) {
+    toast('⚠ El archivo supera el límite de 700MB.');
+    return;
+  }
+
+  // 2. Si es GIF animado, bypass del crop para preservar animación
+  if (file.type === 'image/gif') {
+    const r = new FileReader();
+    r.onload = e => {
+      if (isAdmin) {
+        S.adminPendingAvatar = e.target.result;
+        renderAdminAvatarPreview();
+      } else {
+        S.pendingAvatar = e.target.result;
+        renderProfileAvatarPreview();
+      }
+      toast('✓ GIF animado cargado.');
+    };
+    r.readAsDataURL(file);
+    return;
+  }
+
+  // 3. De lo contrario, iniciar recortador interactivo circular
   const r = new FileReader();
-  r.onload = e => { S.pendingAvatar = e.target.result; renderProfileAvatarPreview(); };
-  r.readAsDataURL(input.files[0]);
+  r.onload = e => {
+    openAvatarCropper(e.target.result, (croppedBase64) => {
+      if (isAdmin) {
+        S.adminPendingAvatar = croppedBase64;
+        renderAdminAvatarPreview();
+      } else {
+        S.pendingAvatar = croppedBase64;
+        renderProfileAvatarPreview();
+      }
+    });
+  };
+  r.readAsDataURL(file);
+}
+
+function openAvatarCropper(imageSrc, callback) {
+  cropState.imgSrc = imageSrc;
+  cropState.callback = callback;
+
+  const cropImg = document.getElementById('cropImg');
+  const cropZoom = document.getElementById('cropZoom');
+  
+  if (!cropImg || !cropZoom) return;
+
+  cropImg.onload = function() {
+    cropState.origW = cropImg.naturalWidth;
+    cropState.origH = cropImg.naturalHeight;
+
+    // Escala mínima requerida para cubrir completamente el espacio de trabajo de 260x260
+    const wScale = 260 / cropState.origW;
+    const hScale = 260 / cropState.origH;
+    cropState.minScale = Math.max(wScale, hScale);
+    cropState.maxScale = cropState.minScale * 4;
+
+    // Configurar el slider
+    cropZoom.min = cropState.minScale;
+    cropZoom.max = cropState.maxScale;
+    cropZoom.step = ((cropState.maxScale - cropState.minScale) / 200).toFixed(5);
+    
+    // Zoom inicial
+    cropState.scale = cropState.minScale;
+    cropZoom.value = cropState.scale;
+    
+    // Centrar inicialmente
+    cropState.offsetX = (260 - cropState.origW * cropState.scale) / 2;
+    cropState.offsetY = (260 - cropState.origH * cropState.scale) / 2;
+
+    constrainCrop();
+    applyCropTransform();
+    updateZoomDisplay();
+
+    openModal('modalCrop');
+  };
+
+  cropImg.src = imageSrc;
+}
+
+function constrainCrop() {
+  const w = cropState.origW * cropState.scale;
+  const h = cropState.origH * cropState.scale;
+
+  if (cropState.offsetX > 0) cropState.offsetX = 0;
+  if (cropState.offsetX < 260 - w) cropState.offsetX = 260 - w;
+
+  if (cropState.offsetY > 0) cropState.offsetY = 0;
+  if (cropState.offsetY < 260 - h) cropState.offsetY = 260 - h;
+}
+
+function applyCropTransform() {
+  const cropImg = document.getElementById('cropImg');
+  if (cropImg) {
+    cropImg.style.transform = `translate(${cropState.offsetX}px, ${cropState.offsetY}px) scale(${cropState.scale})`;
+  }
+}
+
+function updateZoomDisplay() {
+  const zoomPercent = document.getElementById('zoomPercent');
+  if (zoomPercent) {
+    const pct = Math.round((cropState.scale / cropState.minScale) * 100);
+    zoomPercent.textContent = pct + '%';
+  }
+}
+
+function setupCropperEvents() {
+  const workspace = document.getElementById('cropWorkspace');
+  const cropZoom = document.getElementById('cropZoom');
+
+  if (!workspace || !cropZoom) return;
+
+  workspace.addEventListener('pointerdown', function(e) {
+    e.preventDefault();
+    workspace.setPointerCapture(e.pointerId);
+    cropState.isDragging = true;
+    cropState.startX = e.clientX;
+    cropState.startY = e.clientY;
+    cropState.startOffsetX = cropState.offsetX;
+    cropState.startOffsetY = cropState.offsetY;
+  });
+
+  workspace.addEventListener('pointermove', function(e) {
+    if (!cropState.isDragging) return;
+    e.preventDefault();
+    const dx = e.clientX - cropState.startX;
+    const dy = e.clientY - cropState.startY;
+
+    cropState.offsetX = cropState.startOffsetX + dx;
+    cropState.offsetY = cropState.startOffsetY + dy;
+
+    constrainCrop();
+    applyCropTransform();
+  });
+
+  const handlePointerUp = function(e) {
+    if (cropState.isDragging) {
+      cropState.isDragging = false;
+      workspace.releasePointerCapture(e.pointerId);
+    }
+  };
+  workspace.addEventListener('pointerup', handlePointerUp);
+  workspace.addEventListener('pointercancel', handlePointerUp);
+
+  cropZoom.addEventListener('input', function() {
+    const newScale = parseFloat(cropZoom.value);
+    const oldScale = cropState.scale;
+
+    // Zoom centrado
+    const cx = 130;
+    const cy = 130;
+
+    const imgX = (cx - cropState.offsetX) / oldScale;
+    const imgY = (cy - cropState.offsetY) / oldScale;
+
+    cropState.scale = newScale;
+    cropState.offsetX = cx - imgX * newScale;
+    cropState.offsetY = cy - imgY * newScale;
+
+    constrainCrop();
+    applyCropTransform();
+    updateZoomDisplay();
+  });
+}
+
+function cancelCrop() {
+  closeModal('modalCrop');
+  const cropImg = document.getElementById('cropImg');
+  if (cropImg) cropImg.src = '';
+}
+
+function confirmCrop() {
+  const cropImg = document.getElementById('cropImg');
+  if (!cropImg || !cropImg.src) {
+    cancelCrop();
+    return;
+  }
+
+  const canvas = document.createElement('canvas');
+  canvas.width = 300;
+  canvas.height = 300;
+  const ctx = canvas.getContext('2d');
+
+  const cropX = -cropState.offsetX / cropState.scale;
+  const cropY = -cropState.offsetY / cropState.scale;
+  const cropW = 260 / cropState.scale;
+  const cropH = 260 / cropState.scale;
+
+  try {
+    ctx.drawImage(
+      cropImg, 
+      cropX, cropY, cropW, cropH,
+      0, 0, 300, 300
+    );
+    
+    const croppedDataUrl = canvas.toDataURL('image/jpeg', 0.9);
+    
+    if (cropState.callback) {
+      cropState.callback(croppedDataUrl);
+    }
+  } catch (err) {
+    console.error('Error recortando imagen:', err);
+    toast('⚠ Error al procesar el recorte de la imagen.');
+  }
+
+  cancelCrop();
 }
 
 function removeProfileAvatar() {
@@ -1520,9 +1755,8 @@ function renderAdminAvatarPreview() {
 
 function loadAdminAvatar(input) {
   if (!input.files[0]) return;
-  const r = new FileReader();
-  r.onload = e => { S.adminPendingAvatar = e.target.result; renderAdminAvatarPreview(); };
-  r.readAsDataURL(input.files[0]);
+  handleAvatarUpload(input.files[0], true);
+  input.value = '';
 }
 
 function removeAdminAvatar() {

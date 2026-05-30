@@ -436,3 +436,56 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
   }
 }
 
+/* ✂️ ESTILOS DEL RECORTADOR DE AVATAR */
+.crop-workspace-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.2rem;
+}
+#cropWorkspace {
+  width: 260px;
+  height: 260px;
+  position: relative;
+  overflow: hidden;
+  background: #0d0a07;
+  border-radius: 8px;
+  border: 1px solid var(--border2);
+  user-select: none;
+  touch-action: none;
+  cursor: move;
+}
+#cropImg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  cursor: move;
+  max-width: none;
+  max-height: none;
+  user-select: none;
+  pointer-events: none;
+}
+.crop-mask {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+  border: 2px dashed var(--accent);
+  box-sizing: border-box;
+}
+#cropZoom {
+  width: 100%;
+  accent-color: var(--accent);
+  cursor: pointer;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--bg3);
+  outline: none;
+  transition: opacity 0.2s;
+}
+#cropZoom:hover {
+  opacity: 0.9;
+}
+
+
