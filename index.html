@@ -665,10 +665,12 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
 
 <script>
 // ════════════════════════════════════════════
-//  ⚙️ CONFIGURACIÓN SUPABASE
+//  ⚙️ CONFIGURACIÓN — PROXY CLOUDFLARE
+//  Las credenciales de Supabase viven en las
+//  variables de entorno de Cloudflare Pages,
+//  nunca expuestas al navegador.
 // ════════════════════════════════════════════
-const SUPABASE_URL = 'https://nlicistnosjzynobqbvr.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_pVyt7zA5ap9dNf40ZoyYGg_tCptxdAm';
+const API_BASE = '/api/query';
 
 // ════════════════════════════════════════════
 //  ADMINS — gestionados en Supabase via RPC
@@ -701,19 +703,19 @@ let S = {
 };
 
 // ════════════════════════════════════════════
-//  SUPABASE CLIENT
+//  SUPABASE CLIENT (vía proxy Cloudflare)
 // ════════════════════════════════════════════
 const sb = {
   async query(path, opts = {}) {
-    const res = await fetch(SUPABASE_URL + '/rest/v1/' + path, {
-      headers: {
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-        'Content-Type': 'application/json',
-        'Prefer': opts.prefer || '',
-        ...opts.headers
-      },
+    const url = API_BASE + '?path=' + encodeURIComponent(path);
+    const headers = { 'Content-Type': 'application/json' };
+    if (opts.headers) {
+      // Pasar headers extra como Prefer al proxy
+      Object.assign(headers, opts.headers);
+    }
+    const res = await fetch(url, {
       method: opts.method || 'GET',
+      headers,
       body: opts.body ? JSON.stringify(opts.body) : undefined
     });
     if (!res.ok) { const err = await res.text(); throw new Error(err); }
@@ -726,7 +728,6 @@ const sb = {
   async upsert(table, data) {
     return await this.query(table, {
       method: 'POST',
-      prefer: 'resolution=merge-duplicates',
       headers: { 'Prefer': 'resolution=merge-duplicates' },
       body: data
     });
@@ -742,13 +743,9 @@ const sb = {
     return await this.query(table + '?' + col + '=eq.' + encodeURIComponent(val) + '&select=*') || [];
   },
   async rpc(fn, params = {}) {
-    const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/' + fn, {
+    const res = await fetch(API_BASE + '?path=' + encodeURIComponent('rpc/' + fn), {
       method: 'POST',
-      headers: {
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(params)
     });
     const text = await res.text();
@@ -762,13 +759,7 @@ const sb = {
 //  INIT
 // ════════════════════════════════════════════
 async function init() {
-  if (SUPABASE_URL === 'PEGAR_TU_PROJECT_URL_AQUI') {
-    document.getElementById('setupBanner').style.display = 'block';
-    document.getElementById('loadingOverlay').style.display = 'none';
-    document.getElementById('authGate').classList.add('open');
-    return;
-  }
-
+  // Verificar que el proxy responde (si no hay variables en Cloudflare, fallará aquí)
   if (localStorage.getItem('nt_dark') === '1') {
     S.dark = true; document.body.classList.add('dark');
   }
