@@ -383,15 +383,9 @@
               placeholder="Repetí la nueva contraseña"></div>
           <button class="btn btn-secondary btn-sm" onclick="changeUserPassword()">🔒 Cambiar contraseña</button>
         </div>
-        <!-- Confirmar con contraseña para guardar cambios de perfil -->
-        <div class="settings-section">
-          <h4>Confirmar cambios de perfil</h4>
-          <div class="field"><label>Contraseña actual (requerida para guardar)</label><input type="password"
-              id="profileConfirmPwd" placeholder="Tu contraseña actual"></div>
-          <div class="modal-footer" style="padding-top:0;border-top:none;margin-top:.5rem">
-            <button class="btn btn-secondary" onclick="closeModal('modalProfile')">Cancelar</button>
-            <button class="btn btn-primary" onclick="saveUserProfile()">💾 Guardar perfil</button>
-          </div>
+        <div class="modal-footer" style="padding-top:1rem; border-top:1px solid var(--border); margin-top:1.5rem;">
+          <button class="btn btn-secondary" onclick="closeModal('modalProfile')">Cancelar</button>
+          <button class="btn btn-primary" onclick="saveUserProfile()">💾 Guardar perfil</button>
         </div>
       </div>
       <div class="modal-footer" id="profileDefaultFooter">

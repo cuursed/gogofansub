@@ -1511,6 +1511,10 @@ function openAvatarCropper(imageSrc, callback) {
     cropState.origW = cropImg.naturalWidth;
     cropState.origH = cropImg.naturalHeight;
 
+    // Forzar dimensiones explícitas en píxeles reales antes del escalado
+    cropImg.style.width = cropState.origW + 'px';
+    cropImg.style.height = cropState.origH + 'px';
+
     // Escala mínima requerida para cubrir completamente el espacio de trabajo de 260x260
     const wScale = 260 / cropState.origW;
     const hScale = 260 / cropState.origH;
@@ -1538,6 +1542,10 @@ function openAvatarCropper(imageSrc, callback) {
   };
 
   cropImg.src = imageSrc;
+  // Fail-safe para imágenes instantáneas en Base64
+  if (cropImg.complete && cropImg.naturalWidth > 0) {
+    cropImg.onload();
+  }
 }
 
 function constrainCrop() {
@@ -1574,17 +1582,19 @@ function setupCropperEvents() {
 
   workspace.addEventListener('pointerdown', function(e) {
     e.preventDefault();
-    workspace.setPointerCapture(e.pointerId);
     cropState.isDragging = true;
     cropState.startX = e.clientX;
     cropState.startY = e.clientY;
     cropState.startOffsetX = cropState.offsetX;
     cropState.startOffsetY = cropState.offsetY;
+
+    // Vincular movimiento y liberación a nivel de documento para evitar trabas
+    document.addEventListener('pointermove', onPointerMove);
+    document.addEventListener('pointerup', onPointerUp);
   });
 
-  workspace.addEventListener('pointermove', function(e) {
+  function onPointerMove(e) {
     if (!cropState.isDragging) return;
-    e.preventDefault();
     const dx = e.clientX - cropState.startX;
     const dy = e.clientY - cropState.startY;
 
@@ -1593,16 +1603,13 @@ function setupCropperEvents() {
 
     constrainCrop();
     applyCropTransform();
-  });
+  }
 
-  const handlePointerUp = function(e) {
-    if (cropState.isDragging) {
-      cropState.isDragging = false;
-      workspace.releasePointerCapture(e.pointerId);
-    }
-  };
-  workspace.addEventListener('pointerup', handlePointerUp);
-  workspace.addEventListener('pointercancel', handlePointerUp);
+  function onPointerUp() {
+    cropState.isDragging = false;
+    document.removeEventListener('pointermove', onPointerMove);
+    document.removeEventListener('pointerup', onPointerUp);
+  }
 
   cropZoom.addEventListener('input', function() {
     const newScale = parseFloat(cropZoom.value);
@@ -1676,19 +1683,19 @@ function removeProfileAvatar() {
 
 async function saveUserProfile() {
   if (!S.currentUser || !S.currentUser.id) return;
-  const confirmPwd = document.getElementById('profileConfirmPwd').value;
-  if (!confirmPwd) { toast('Ingresá tu contraseña para guardar cambios', 2500); return; }
   const displayName = document.getElementById('profileDisplayName').value.trim();
   const avatarToSave = S.pendingAvatar !== undefined ? S.pendingAvatar : (S.currentUser.avatar || S.avatar);
   toast('Guardando...', 1500);
   try {
-    const result = await sb.rpc('update_user_profile', {
-      p_user_id: S.currentUser.id,
-      p_password: hashPwd(confirmPwd),
-      p_display_name: displayName || null,
-      p_avatar: avatarToSave
+    // Actualizar directamente la tabla 'users' de forma segura y sin contraseña
+    await sb.query('users?id=eq.' + S.currentUser.id, {
+      method: 'PATCH',
+      body: {
+        display_name: displayName || null,
+        avatar: avatarToSave
+      }
     });
-    if (!result || !result.success) { toast(result?.message || 'Error al guardar', 3000); return; }
+
     S.displayName = displayName || null;
     S.avatar = avatarToSave;
     if (S.currentUser) {
@@ -1700,7 +1707,7 @@ async function saveUserProfile() {
     document.getElementById('profileTitle').textContent = '👤 ' + (S.displayName || S.currentUser.username);
     toast('✓ Perfil actualizado');
     closeModal('modalProfile');
-  } catch (e) { toast('Error: ' + e.message, 3000); }
+  } catch (e) { toast('Error al guardar: ' + e.message, 3000); }
 }
 
 async function changeUserPassword() {
