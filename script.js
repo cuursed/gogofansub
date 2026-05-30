@@ -161,6 +161,8 @@ async function init() {
         const result = await sb.rpc('login_admin', { p_username: savedSession, p_password: savedAdminPwd });
         if (result && result.success) {
           S.currentUser = { username: result.username, role: 'admin', id: 'admin_' + result.username, avatar: result.avatar };
+          S.displayName = result.display_name || null;
+          S.avatar = result.avatar || null;
           S.admin = true;
           loadLocalPrefs();
           updateNavUser(); updateAdminUI();
@@ -263,6 +265,8 @@ async function doLogin() {
       // Guardar contraseña hasheada en sessionStorage para restaurar sesión al recargar
       sessionStorage.setItem('nt_admin_pwd', hashPwd(pwd));
       S.currentUser = { username: result.username, role: 'admin', id: 'admin_' + result.username, avatar: result.avatar };
+      S.displayName = result.display_name || null;
+      S.avatar = result.avatar || null;
       await loginSuccess(username, 'admin', 'admin_' + username);
       return;
     }
@@ -1419,12 +1423,20 @@ function renderProfileAvatarPreview() {
   const el = document.getElementById('profileAvatarPreview');
   if (!el) return;
   const src = S.pendingAvatar !== undefined ? S.pendingAvatar : S.avatar;
+  
+  const uploadBtn = el.nextElementSibling ? el.nextElementSibling.querySelector('.avatar-upload-btn:not(.danger-btn)') : null;
+  const removeBtn = el.nextElementSibling ? el.nextElementSibling.querySelector('.avatar-upload-btn.danger-btn') : null;
+
   if (src) {
     el.innerHTML = `<img src="${src}" alt="">`;
     el.style.background = 'transparent';
+    if (uploadBtn) uploadBtn.innerHTML = '📷 Cambiar foto';
+    if (removeBtn) removeBtn.style.display = 'inline-block';
   } else {
     el.textContent = S.currentUser ? S.currentUser.username.charAt(0).toUpperCase() : '?';
     el.style.background = '#5a8a6a';
+    if (uploadBtn) uploadBtn.innerHTML = '📷 Añadir foto';
+    if (removeBtn) removeBtn.style.display = 'none';
   }
 }
 
@@ -1686,14 +1698,28 @@ async function saveUserProfile() {
   const avatarToSave = S.pendingAvatar !== undefined ? S.pendingAvatar : (S.currentUser.avatar || S.avatar);
   toast('Guardando...', 1500);
   try {
-    // Actualizar directamente la tabla 'users' de forma segura y sin contraseña
-    await sb.query('users?id=eq.' + S.currentUser.id, {
-      method: 'PATCH',
-      body: {
-        display_name: displayName || null,
-        avatar: avatarToSave
-      }
-    });
+    if (S.currentUser.role === 'admin') {
+      // Si es administrador, guardar en la tabla admins vía RPC
+      const pwd = sessionStorage.getItem('nt_admin_pwd');
+      if (!pwd) { toast('Sesión expirada, volvé a iniciar sesión', 3000); return; }
+      
+      const result = await sb.rpc('update_admin_profile', {
+        p_username: S.currentUser.username,
+        p_password: pwd,
+        p_display_name: displayName || null,
+        p_avatar: avatarToSave
+      });
+      if (!result || !result.success) { toast(result?.message || 'Error al guardar', 3000); return; }
+    } else {
+      // Si es lector, actualizar directamente la tabla 'users' de forma segura y sin contraseña
+      await sb.query('users?id=eq.' + S.currentUser.id, {
+        method: 'PATCH',
+        body: {
+          display_name: displayName || null,
+          avatar: avatarToSave
+        }
+      });
+    }
 
     S.displayName = displayName || null;
     S.avatar = avatarToSave;
@@ -1750,12 +1776,20 @@ function renderAdminAvatarPreview() {
   const el = document.getElementById('adminAvatarPreview');
   if (!el) return;
   const src = S.adminPendingAvatar !== undefined ? S.adminPendingAvatar : (S.currentUser?.avatar || S.avatar);
+  
+  const uploadBtn = el.nextElementSibling ? el.nextElementSibling.querySelector('.avatar-upload-btn:not(.danger-btn)') : null;
+  const removeBtn = el.nextElementSibling ? el.nextElementSibling.querySelector('.avatar-upload-btn.danger-btn') : null;
+
   if (src) {
     el.innerHTML = `<img src="${src}" alt="">`;
     el.style.background = 'transparent';
+    if (uploadBtn) uploadBtn.innerHTML = '📷 Cambiar foto';
+    if (removeBtn) removeBtn.style.display = 'inline-block';
   } else {
     el.textContent = S.currentUser ? S.currentUser.username.charAt(0).toUpperCase() : '?';
     el.style.background = 'var(--accent)';
+    if (uploadBtn) uploadBtn.innerHTML = '📷 Añadir foto';
+    if (removeBtn) removeBtn.style.display = 'none';
   }
 }
 
