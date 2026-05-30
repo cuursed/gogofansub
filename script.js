@@ -514,7 +514,6 @@ function openUserProfile() {
   document.getElementById('profileOldPwd').value = '';
   document.getElementById('profileNewPwd').value = '';
   document.getElementById('profileNewPwd2').value = '';
-  document.getElementById('profileConfirmPwd').value = '';
   // Avatar preview
   S.pendingAvatar = undefined;
   renderProfileAvatarPreview();
