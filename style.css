@@ -257,7 +257,7 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
 .profile-novel-card:hover .novel-cover{transform:translateY(-2px);box-shadow:0 4px 12px var(--shadow2);}
 .profile-novel-card .novel-cover{width:100%;aspect-ratio:2/3;background:var(--bg3);border-radius:5px;overflow:hidden;border:1px solid var(--border);transition:all .2s;}
 .profile-novel-card .novel-cover img{width:100%;height:100%;object-fit:cover;}
-.profile-novel-card .pnc-title{font-size:.72rem;color:var(--text2);margin-top:.35rem;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.profile-novel-card .pnc-title{font-size:.72rem;color:var(--text2);margin-top:.35rem;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-clamp:2;}
 .profile-novel-card .pnc-progress{font-size:.65rem;color:var(--text3);}
 .profile-stat{display:flex;align-items:center;justify-content:space-between;padding:.4rem 0;border-bottom:1px solid var(--border);font-size:.84rem;}
 .profile-stat:last-child{border-bottom:none;}
